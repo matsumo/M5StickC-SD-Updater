@@ -14,7 +14,8 @@ wget https://github.com/tobozo/M5StackSAM/archive/patch-1.zip --output-document=
 unzip -d ~/Arduino/libraries M5StackSAM-master.zip
 
 #wget https://github.com/m5stack/M5Stack/archive/master.zip --output-document=M5Stack.zip
-curl -v --retry 5 "https://api.github.com/repos/M5Stack/M5Stack/releases/latest?access_token=$GH_TOKEN" | jq -r ".zipball_url" | wget --output-document=M5Stack.zip -i -
+#curl -v --retry 5 "https://api.github.com/repos/M5Stack/M5Stack/releases/latest?access_token=$GH_TOKEN" | jq -r ".zipball_url" | wget --output-document=M5Stack.zip -i -
+wget https://github.com/nmori/M5Stack/archive/master.zip --output-document=M5Stack.zip
 unzip -d ~/Arduino/libraries M5Stack.zip
 
 wget https://github.com/earlephilhower/ESP8266Audio/archive/master.zip --output-document=ESP8266Audio.zip
