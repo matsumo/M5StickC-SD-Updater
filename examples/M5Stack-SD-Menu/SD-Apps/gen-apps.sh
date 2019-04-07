@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-if [ "$TRAVIS_BRANCH" != "master" ]; then
+if [ "$TRAVIS_BRANCH" != "nmori" ]; then
   # only rebuild all when master is updated
   echo "Skipping rebuild, will download last binaries"
   export LAST_SDAPP_FILE="SD-Apps-Folder.zip"
