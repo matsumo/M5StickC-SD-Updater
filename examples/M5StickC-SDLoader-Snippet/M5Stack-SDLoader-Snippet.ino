@@ -43,7 +43,8 @@
  */
 
 #include <M5StickC.h>
-#include "M5StickcUpdater.h"
+#include <M5StickcUpdater.h>
+#include <SPIFFS.h>
 
 void setup() {
   Serial.begin(115200);
@@ -51,6 +52,7 @@ void setup() {
   Serial.print("M5StickC initializing...");
   M5.begin();
   Wire.begin();
+  SPIFFS.begin();
   pinMode(M5_BUTTON_RST, INPUT);
   if(digitalRead(M5_BUTTON_RST) == 0) {
     Serial.println("Will Load menu binary");
