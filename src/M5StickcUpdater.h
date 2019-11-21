@@ -1,9 +1,11 @@
-#ifndef __M5STACKUPDATER_H
-#define __M5STACKUPDATER_H
+#ifndef __M5STICKCUPDATER_H
+#define __M5STICKCUPDATER_H
 /*
  *
- * M5Stack SD Updater
- * Project Page: https://github.com/tobozo/M5Stack-SD-Updater
+ * M5StickC SD Updater
+ * Project Page: https://github.com/matsumo/M5StickC-SD-Updater
+ *
+ * Fork From   : https://github.com/tobozo/M5Stack-SD-Updater
  * 
  * Copyright 2018 tobozo http://github.com/tobozo
  *
@@ -38,11 +40,11 @@
  * 
  * In your sketch, find the line where M5 library is included:
  * 
- *   #include <M5Stack.h>
+ *   #include <M5StickC.h>
  *  
  * And add this:
  * 
- *  #include "M5StackUpdater.h"
+ *  #include "M5StickcUpdater.h"
  *  SDUpdater sdUpdater;
  *  
  * 
@@ -53,9 +55,10 @@
  * 
  * And add this after 'Wire.begin();':
  * 
- *   if(digitalRead(BUTTON_A_PIN) == 0) {
+ *   pinMode(M5_BUTTON_RST, INPUT);
+ *   if(digitalRead(M5_BUTTON_RST) == 0) {
  *     Serial.println("Will Load menu binary");
- *     sdUpdater.updateFromFS(SD);
+ *     sdUpdater.updateFromFS(SPIFFS);
  *     ESP.restart();
  *   }
  * 
@@ -71,14 +74,14 @@ extern "C" {
 #include "esp_ota_ops.h"
 #include "esp_image_format.h"
 }
-#include <M5Stack.h>
+#include <M5StickC.h>
 #include <Update.h>
 #include <Preferences.h>
 #ifndef MENU_BIN
 #define MENU_BIN "/menu.bin"
 #endif
 
-#ifdef M5STACK
+#ifdef M5STICKC
 // backwards compat
 #define M5SDMenuProgress SDMenuProgress
 #endif
@@ -95,7 +98,7 @@ class SDUpdater {
     void tryRollback( String fileName );
 };
 
-/* don't break older versions of the M5Stack SD Updater */
+/* don't break older versions of the M5StickC SD Updater */
 static void updateFromFS( fs::FS &fs, String fileName = MENU_BIN ) {
   SDUpdater sdUpdater;
   sdUpdater.updateFromFS( fs, fileName );

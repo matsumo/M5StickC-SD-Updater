@@ -1,7 +1,9 @@
 /*
  *
- * M5Stack SD Updater
- * Project Page: https://github.com/tobozo/M5Stack-SD-Updater
+ * M5StickC SD Updater
+ * Project Page: https://github.com/matsumo/M5StickC-SD-Updater
+ *
+ * Fork From   : https://github.com/tobozo/M5Stack-SD-Updater
  *
  * Copyright 2018 tobozo http://github.com/tobozo
  *
@@ -28,16 +30,17 @@
  *
  */
 
-#include "M5StackUpdater.h"
+#include "M5StickcUpdater.h"
 
 static int SD_UI_Progress;
-#ifdef M5STACK
+//#ifdef M5STICKC
 #define tft M5.Lcd // syntax sugar, forward compat with other displays
-#endif
+//#endif
 
 void SDUpdater::displayUpdateUI( String label ) {
   tft.begin();
-  tft.setBrightness( 100 );
+  M5.Axp.ScreenBreath(15);   // screen brightness (7-15)
+  tft.setRotation(3);         // 180 x 60
   tft.fillScreen( BLACK );
   tft.setTextColor( WHITE );
   tft.setTextFont( 0 );
@@ -53,9 +56,9 @@ void SDUpdater::displayUpdateUI( String label ) {
       xpos = 0 ;
     }
   }
-  tft.setCursor( xpos, 10 );
+  tft.setCursor( xpos, 0 );
   tft.print( label );
-  tft.drawRect( 110, 130, 102, 20, WHITE );
+  tft.drawRect( 30, 20, 102, 20, WHITE );
   SD_UI_Progress = -1;
 }
 
@@ -76,11 +79,11 @@ void SDUpdater::SDMenuProgress( int state, int size ) {
   int textbgcolor = tft.textbgcolor;
 
   if ( percent >= 0 && percent < 101 ) {
-    tft.fillRect( 111, 131, percent, 18, GREEN );
-    tft.fillRect( 111+percent, 131, 100-percent, 18, BLACK );
+    tft.fillRect( 31, 21, percent, 18, GREEN );
+    tft.fillRect( 31+percent, 21, 100-percent, 18, BLACK );
     Serial.print( "." );
   } else {
-    tft.fillRect( 111, 131, 100, 18, BLACK );
+    tft.fillRect( 31, 21, 100, 18, BLACK );
     Serial.println();
   }
   String percentStr = String( percent ) + "% ";
@@ -89,7 +92,7 @@ void SDUpdater::SDMenuProgress( int state, int size ) {
   tft.setTextColor( WHITE, BLACK );
   int16_t xpos = ( tft.width() / 2 ) - ( tft.textWidth( percentStr ) / 2 );
   if ( xpos < 0 ) xpos = 0 ;
-  tft.setCursor( xpos, 155 );
+  tft.setCursor( xpos, 45 );
   tft.print( percentStr ); // trailing space is important
   tft.setCursor( x, y );
   tft.setTextFont( textfont ); // Select font 0 which is the Adafruit font
@@ -209,13 +212,13 @@ void SDUpdater::tryRollback( String fileName ) {
 // check given FS for valid menu.bin and perform update if available
 void SDUpdater::updateFromFS( fs::FS &fs, String fileName ) {
   #ifdef M5_SD_UPDATER_VERSION
-    Serial.printf( "[M5Stack-SD-Updater] SD Updater version: %s\n", (char*)M5_SD_UPDATER_VERSION );
+    Serial.printf( "[M5StickC-SD-Updater] SD Updater version: %s\n", (char*)M5_SD_UPDATER_VERSION );
   #endif
   #ifdef M5_LIB_VERSION
-    Serial.printf( "[M5Stack-SD-Updater] M5Stack Core version: %s\n", (char*)M5_LIB_VERSION );
+    Serial.printf( "[M5StickC-SD-Updater] M5StickC Core version: %s\n", (char*)M5_LIB_VERSION );
   #endif
-  Serial.printf( "[M5Stack-SD-Updater] Application was Compiled on %s %s\n", __DATE__, __TIME__ );
-  Serial.printf( "[M5Stack-SD-Updater] Will attempt to load binary %s \n", fileName.c_str() );
+  Serial.printf( "[M5StickC-SD-Updater] Application was Compiled on %s %s\n", __DATE__, __TIME__ );
+  Serial.printf( "[M5StickC-SD-Updater] Will attempt to load binary %s \n", fileName.c_str() );
   // try rollback first, it's faster!
   if( strcmp( MENU_BIN, fileName.c_str() ) == 0 ) {
     tryRollback( fileName );
